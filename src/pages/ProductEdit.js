@@ -25,7 +25,8 @@ export default function ProductEdit() {
 
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
-    
+    const [oldImage, setOldImage] = useState(null);
+
 
     const [images, setImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
