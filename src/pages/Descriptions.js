@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./StyleWeb/Description.css";
+import { BASE_URL } from "../config";
 
 export default function DescriptionPage() {
   const [fields, setFields] = useState([]);
@@ -11,7 +12,7 @@ export default function DescriptionPage() {
 
   const fetchFields = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/description-fields");
+      const res = await axios.get(`${BASE_URL}/api/description-fields`);
       setFields(res.data);
     } catch (err) {
       console.error("Lỗi khi tải mục mô tả", err);
@@ -25,7 +26,7 @@ export default function DescriptionPage() {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/description-fields", { name });
+      await axios.post(`${BASE_URL}/api/description-fields`, { name });
       setName("");
       setMessage("✅ Thêm thành công!");
       fetchFields();
@@ -36,7 +37,7 @@ export default function DescriptionPage() {
 
   const handleUpdate = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/description-fields/${id}`, {
+      await axios.put(`${BASE_URL}/api/description-fields/${id}`, {
         name: editedName,
       });
       setEditingId(null);
@@ -49,7 +50,7 @@ export default function DescriptionPage() {
   const handleDelete = async (id) => {
     if (!window.confirm("Xoá mục mô tả này?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/description-fields/${id}`);
+      await axios.delete(`${BASE_URL}/api/description-fields/${id}`);
       fetchFields();
     } catch (err) {
       alert("Không thể xoá mục mô tả");

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; //  để điều hướng
 import "./StyleWeb/Register.css"; // 
+import { BASE_URL } from "../config";
 
 export default function Register() {
   const navigate = useNavigate(); // 
@@ -20,9 +21,9 @@ export default function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/admin/register", form);
+      await axios.post(`${BASE_URL}/api/admin/register`, form);
       alert("Đăng ký thành công!");
-      navigate("/login"); // ✅ điều hướng sau khi đăng ký
+      navigate("/login"); // điều hướng sau khi đăng ký
     } catch (err) {
       alert(err.response?.data?.message || "Lỗi đăng ký");
     }

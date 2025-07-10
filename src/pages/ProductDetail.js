@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./StyleWeb/ProductDetail.css";
+import { BASE_URL } from "../config";
+
 
 export default function ProductDetail() {
     const { id } = useParams();
@@ -11,7 +13,7 @@ export default function ProductDetail() {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+                const res = await axios.get(`${BASE_URL}/api/products/${id}`);
                 setProduct(res.data);
             } catch (err) {
                 console.error("Lỗi khi tải chi tiết sản phẩm:", err);
@@ -32,7 +34,7 @@ export default function ProductDetail() {
             <h3>Ảnh đại diện:</h3>
             {product.image && (
                 <img
-                    src={`http://localhost:5000${product.image}`}
+                    src={`${BASE_URL}${product.image}`}
                     alt="Ảnh đại diện"
                     className="main-image"
                     style={{ maxWidth: "300px", borderRadius: "8px", marginBottom: "10px" }}
@@ -49,7 +51,7 @@ export default function ProductDetail() {
                             .map((img, idx) => (
                                 <img
                                     key={idx}
-                                    src={`http://localhost:5000${img}`}
+                                    src={`${BASE_URL}${img}`}
                                     alt={`img-${idx}`}
                                     className="sub-image"
                                     style={{

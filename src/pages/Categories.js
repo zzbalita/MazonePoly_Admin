@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./StyleWeb/Category.css";
 import axios from "axios";
+import { BASE_URL } from "../config";
 
 export default function CategoryPage() {
     const [categories, setCategories] = useState([]);
@@ -13,7 +14,7 @@ export default function CategoryPage() {
     // Fetch danh sách danh mục
     const fetchCategories = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/api/categories");
+            const res = await axios.get(`${BASE_URL}/api/categories`);
             setCategories(res.data);
         } catch (err) {
             console.error("Lỗi khi lấy danh mục:", err);
@@ -29,7 +30,7 @@ export default function CategoryPage() {
         }
 
         try {
-            await axios.post("http://localhost:5000/api/categories", { name });
+            await axios.post(`${BASE_URL}/api/categories`, { name });
             setName("");
             setMessage("✅ Thêm danh mục thành công!");
             fetchCategories();
@@ -43,7 +44,7 @@ export default function CategoryPage() {
         if (!confirmDelete) return;
 
         try {
-            await axios.delete(`http://localhost:5000/api/categories/${id}`);
+            await axios.delete(`${BASE_URL}/api/categories/${id}`);
             fetchCategories(); // Refresh lại danh sách
         } catch (err) {
             alert("Không thể xoá danh mục!");
@@ -55,7 +56,7 @@ export default function CategoryPage() {
         if (!editedName.trim()) return;
 
         try {
-            await axios.put(`http://localhost:5000/api/categories/${id}`, {
+            await axios.put(`${BASE_URL}/api/categories/${id}`, {
                 name: editedName,
             });
             setEditingId(null); // Thoát chế độ chỉnh sửa

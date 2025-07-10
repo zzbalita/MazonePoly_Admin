@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import "./StyleWeb/ProductAdd.css";
+import { BASE_URL } from "../config";
+
 
 export default function ProductEdit() {
     const { id } = useParams();
@@ -23,7 +25,7 @@ export default function ProductEdit() {
 
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
-    const [oldImage, setOldImage] = useState(null);
+    
 
     const [images, setImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
@@ -47,7 +49,7 @@ export default function ProductEdit() {
 
     const fetchProduct = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+            const res = await axios.get(`${BASE_URL}/api/products/${id}`);
             const data = res.data;
             setName(data.name);
             setPrice(data.price);
@@ -56,7 +58,7 @@ export default function ProductEdit() {
             setStatus(data.status);
             setDescriptions(data.description || []);
             setOldImage(data.image);
-            setImagePreview(data.image ? `http://localhost:5000${data.image}` : null);
+            setImagePreview(data.image ? `${BASE_URL}${data.image}` : null);
             setImagesToKeep(data.images || []);
             setVariations(data.variations || []);
 
@@ -68,22 +70,22 @@ export default function ProductEdit() {
     };
 
     const fetchCategories = async () => {
-        const res = await axios.get("http://localhost:5000/api/categories");
+        const res = await axios.get(`${BASE_URL}/api/categories`);
         setCategories(res.data);
     };
 
     const fetchBrands = async () => {
-        const res = await axios.get("http://localhost:5000/api/brands");
+        const res = await axios.get(`${BASE_URL}/api/brands`);
         setBrands(res.data);
     };
 
     const fetchSizes = async () => {
-        const res = await axios.get("http://localhost:5000/api/sizes");
+        const res = await axios.get(`${BASE_URL}/api/sizes`);
         setSizeOptions(res.data);
     };
 
     const fetchDescriptionFields = async () => {
-        const res = await axios.get("http://localhost:5000/api/description-fields");
+        const res = await axios.get(`${BASE_URL}/api/description-fields`);
         setDescriptionFields(res.data);
     };
 
@@ -169,9 +171,10 @@ export default function ProductEdit() {
                 formData.append("imagesMode", "keep");
             }
 
-            await axios.put(`http://localhost:5000/api/products/${id}`, formData, {
+            await axios.put(`${BASE_URL}/api/products/${id}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
+
 
             setMessage("✅ Cập nhật thành công!");
             setTimeout(() => navigate("/products"), 1000);
@@ -221,7 +224,7 @@ export default function ProductEdit() {
                         {imagesToKeep.map((img, idx) => (
                             <div key={idx} className="preview-item">
                                 <img
-                                    src={`http://localhost:5000${img}`}
+                                    src={`${BASE_URL}${img}`}
                                     alt={`img-${idx}`}
                                     className="preview-img"
                                     onClick={() => handleRemoveOldImage(idx)}

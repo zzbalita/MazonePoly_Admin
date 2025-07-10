@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./StyleWeb/Brand.css";
+import { BASE_URL } from "../config";
 
 export default function BrandPage() {
   const [brands, setBrands] = useState([]);
@@ -10,7 +11,7 @@ export default function BrandPage() {
 
   const fetchBrands = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/brands");
+      const res = await axios.get(`${BASE_URL}/api/brands`); 
       setBrands(res.data);
     } catch (err) {
       setMessage("❌ Không thể tải thương hiệu.");
@@ -25,10 +26,10 @@ export default function BrandPage() {
 
     try {
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/brands/${editingId}`, { name });
+        await axios.put(`${BASE_URL}/api/brands/${editingId}`, { name });
         setMessage("✅ Cập nhật thành công!");
       } else {
-        await axios.post("http://localhost:5000/api/brands", { name });
+        await axios.post(`${BASE_URL}/api/brands`, { name });
         setMessage("✅ Thêm thương hiệu thành công!");
       }
 
@@ -58,7 +59,7 @@ export default function BrandPage() {
     if (!confirm) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/brands/${id}`);
+      await axios.delete(`${BASE_URL}/api/brands/${id}`);
       setMessage("🗑️ Đã xoá thương hiệu.");
       fetchBrands();
     } catch (err) {

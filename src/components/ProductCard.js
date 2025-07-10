@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { BASE_URL } from "../config";
 
 export default function ProductCard({ product }) {
   // Tạo mảng tất cả ảnh: [ảnh đại diện, ...ảnh bổ sung]
@@ -23,7 +24,7 @@ export default function ProductCard({ product }) {
     <div className="product-card">
       <div className="image-wrapper">
         <img
-          src={`http://localhost:5000${allImages[currentImageIndex]}`}
+          src={`${BASE_URL}${allImages[currentImageIndex]}`}
           alt={product.name}
           className="main-image"
         />

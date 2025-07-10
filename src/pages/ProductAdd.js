@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./StyleWeb/ProductAdd.css";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config";
+
 
 export default function ProductAdd() {
   const [name, setName] = useState("");
@@ -40,22 +42,22 @@ export default function ProductAdd() {
   }, []);
 
   const fetchCategories = async () => {
-    const res = await axios.get("http://localhost:5000/api/categories");
+    const res = await axios.get(`${BASE_URL}/api/categories`);
     setCategories(res.data);
   };
 
   const fetchBrands = async () => {
-    const res = await axios.get("http://localhost:5000/api/brands");
+    const res = await axios.get(`${BASE_URL}/api/brands`);
     setBrands(res.data);
   };
 
   const fetchSizes = async () => {
-    const res = await axios.get("http://localhost:5000/api/sizes");
+    const res = await axios.get(`${BASE_URL}/api/sizes`);
     setSizeOptions(res.data);
   };
 
   const fetchDescriptionFields = async () => {
-    const res = await axios.get("http://localhost:5000/api/description-fields");
+    const res = await axios.get(`${BASE_URL}/api/description-fields`);
     setDescriptionFields(res.data);
   };
 
@@ -133,10 +135,11 @@ export default function ProductAdd() {
       formData.append("status", status);
       formData.append("variations", JSON.stringify(variations));
       images.forEach((img) => formData.append("images", img));
-
-      await axios.post("http://localhost:5000/api/products", formData, {
+      
+      await axios.post(`${BASE_URL}/api/products`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+
 
       setMessage("✅ Thêm sản phẩm thành công!");
       setTimeout(() => navigate("/products"), 1000);

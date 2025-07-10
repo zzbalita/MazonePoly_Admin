@@ -4,6 +4,7 @@ import "./StyleWeb/Products.css";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import ProductCard from "../components/ProductCard";
+import { BASE_URL } from "../config";
 
 
 export default function Products() {
@@ -16,7 +17,7 @@ export default function Products() {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get(`${BASE_URL}/api/products`);
       setProducts(res.data);
     } catch (err) {
       console.error("Lỗi tải sản phẩm", err);
@@ -28,7 +29,7 @@ export default function Products() {
     if (!confirm) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      await axios.delete(`${BASE_URL}/api/products/${id}`);
       setProducts(products.filter((p) => p._id !== id)); // Cập nhật danh sách
       alert("Đã xoá sản phẩm!");
     } catch (err) {
