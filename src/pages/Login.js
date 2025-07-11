@@ -8,7 +8,7 @@ import { BASE_URL } from "../config";
 export default function Login() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // dùng để điều hướng
+  const navigate = useNavigate(); //điều hướng
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -51,12 +51,14 @@ export default function Login() {
         </div>
 
         <button type="submit" className="login-button">
-          Đăng nhập
+          Đăng nhập 
         </button>
 
-        <div className="login-link">
-          <span>Bạn chưa có tài khoản? </span>
-          <button onClick={() => navigate("/register")}>Đăng ký</button> {/* Chuyển sang trang đăng ký */}
+         <div className="login-link">
+          <span>Quên mật khẩu? </span>
+          <button type="button" onClick={() => navigate("/forgot-password")}>
+            Đổi mật khẩu
+          </button>
         </div>
       </form>
     </div>

@@ -12,6 +12,7 @@ import Sizes from "./pages/Sizes";
 import Descriptions from "./pages/Descriptions";
 import ProductDetail from "./pages/ProductDetail";
 import ProductEdit from "./pages/ProductEdit";
+import ForgotPassword from "./pages/ForgotPassword";
 
 
 function App() {
@@ -21,8 +22,8 @@ function App() {
         {/* Public routes */}
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        
         {/* Admin routes - được bảo vệ */}
         <Route
           path="/dashboard"
