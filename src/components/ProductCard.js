@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { BASE_URL } from "../config";
 
 export default function ProductCard({ product }) {
-  // Tạo mảng tất cả ảnh: [ảnh đại diện, ...ảnh bổ sung]
-  const allImages = [
-    product.image?.startsWith("http") || product.image?.startsWith("/")
-      ? product.image
-      : `/uploads/${product.image}`, // hoặc fallback
-    ...(Array.isArray(product.images) ? product.images : []),
-  ].filter(Boolean); // loại bỏ giá trị null/undefined
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  if (!product) return null;
+
+  // Gộp ảnh chính và ảnh phụ, loại null/undefined
+  const allImages = [
+    product.image,
+    ...(Array.isArray(product.images) ? product.images : []),
+  ].filter(Boolean);
 
   const handleNext = () => {
     setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
@@ -20,14 +20,24 @@ export default function ProductCard({ product }) {
     setCurrentImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
   };
 
+  // Hàm xử lý URL ảnh
+  const getImageUrl = (url) => {
+    if (!url) return "";
+    return url.startsWith("http") ? url : `${BASE_URL}${url}`;
+  };
+
   return (
     <div className="product-card">
       <div className="image-wrapper">
-        <img
-          src={`${BASE_URL}${allImages[currentImageIndex]}`}
-          alt={product.name}
-          className="main-image"
-        />
+        {allImages.length > 0 ? (
+          <img
+            src={getImageUrl(allImages[currentImageIndex])}
+            alt={product.name}
+            className="main-image"
+          />
+        ) : (
+          <div className="no-image">Không có ảnh</div>
+        )}
 
         {allImages.length > 1 && (
           <>

@@ -25,6 +25,14 @@ export default function ProductEdit() {
 
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
+    useEffect(() => {
+        return () => {
+            if (imagePreview?.startsWith("blob:")) {
+                URL.revokeObjectURL(imagePreview);
+            }
+        };
+    }, [imagePreview]);
+
     const [oldImage, setOldImage] = useState(null);
 
 
@@ -59,7 +67,14 @@ export default function ProductEdit() {
             setStatus(data.status);
             setDescriptions(data.description || []);
             setOldImage(data.image);
-            setImagePreview(data.image ? `${BASE_URL}${data.image}` : null);
+            setImagePreview(
+                data.image
+                    ? data.image.startsWith("http")
+                        ? data.image // ảnh Cloudinary
+                        : `${BASE_URL}${data.image}` // ảnh local
+                    : null
+            );
+
             setImagesToKeep(data.images || []);
             setVariations(data.variations || []);
 
@@ -164,7 +179,12 @@ export default function ProductEdit() {
                 formData.append("imageMode", "keep");
             }
 
-            formData.append("imagesToRemove", JSON.stringify(imagesToRemove));
+            if (imagesToRemove.length > 0) {
+                formData.append("imagesToRemove", JSON.stringify(imagesToRemove));
+            } else {
+                formData.append("imagesToRemove", JSON.stringify([]));
+            }
+
             if (images.length > 0) {
                 images.forEach((img) => formData.append("images", img));
                 formData.append("imagesMode", "append");
@@ -205,17 +225,31 @@ export default function ProductEdit() {
 
 
                         {imagePreview && (
-                            <img src={imagePreview} alt="current" className="preview-img" />
-                        )}</div>
+                            <img
+                                src={
+                                    imagePreview.startsWith("http") || imagePreview.startsWith("blob:")
+                                        ? imagePreview
+                                        : `${BASE_URL}${imagePreview}`
+                                }
+                                alt="current"
+                                className="preview-img"
+                            />
+                        )}
+
+                    </div>
                     <input
                         type="file"
                         accept="image/*"
                         onChange={(e) => {
-                            const file = e.target.files[0];
-                            setImage(file);
-                            setImagePreview(URL.createObjectURL(file));
+                            const file = e.target.files?.[0];
+                            if (file) {
+                                setImage(file);
+                                setImagePreview(URL.createObjectURL(file));
+                            }
                         }}
                     />
+
+
                 </div>
 
                 {/* Ảnh bổ sung */}
@@ -225,7 +259,7 @@ export default function ProductEdit() {
                         {imagesToKeep.map((img, idx) => (
                             <div key={idx} className="preview-item">
                                 <img
-                                    src={`${BASE_URL}${img}`}
+                                    src={img.startsWith("http") ? img : `${BASE_URL}${img}`}
                                     alt={`img-${idx}`}
                                     className="preview-img"
                                     onClick={() => handleRemoveOldImage(idx)}
@@ -234,6 +268,7 @@ export default function ProductEdit() {
                                 />
                             </div>
                         ))}
+
                         {imagePreviews.map((src, idx) => (
                             <div key={idx} className="preview-item">
                                 <img

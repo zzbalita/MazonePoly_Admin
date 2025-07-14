@@ -29,15 +29,25 @@ export default function ProductDetail() {
             <button onClick={() => navigate("/products")} className="btn-back">Quay lại</button>
 
             <h2 style={{ marginLeft: "300px" }}>Chi tiết sản phẩm</h2>
+
             <h3><p><strong>Tên sản phẩm: </strong> {product.name}</p></h3>
+
             {/* Ảnh đại diện */}
             <h3>Ảnh đại diện:</h3>
             {product.image && (
                 <img
-                    src={`${BASE_URL}${product.image}`}
+                    src={
+                        product.image.startsWith("http") || product.image.startsWith("blob:")
+                            ? product.image
+                            : `${BASE_URL}${product.image}`
+                    }
                     alt="Ảnh đại diện"
                     className="main-image"
-                    style={{ maxWidth: "300px", borderRadius: "8px", marginBottom: "10px" }}
+                    style={{
+                        maxWidth: "300px",
+                        borderRadius: "8px",
+                        marginBottom: "10px"
+                    }}
                 />
             )}
 
@@ -51,7 +61,11 @@ export default function ProductDetail() {
                             .map((img, idx) => (
                                 <img
                                     key={idx}
-                                    src={`${BASE_URL}${img}`}
+                                    src={
+                                        img.startsWith("http") || img.startsWith("blob:")
+                                            ? img
+                                            : `${BASE_URL}${img}`
+                                    }
                                     alt={`img-${idx}`}
                                     className="sub-image"
                                     style={{
