@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./StyleWeb/Category.css";
 import axios from "axios";
+import { BASE_URL } from "../config";
 
 export default function SizePage() {
   const [sizes, setSizes] = useState([]);
