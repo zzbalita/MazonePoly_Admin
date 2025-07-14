@@ -11,7 +11,7 @@ export default function SizePage() {
 
   const fetchSizes = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/sizes");
+      const res = await axios.get(`${BASE_URL}/api/sizes`);
       setSizes(res.data);
     } catch (err) {
       setMessage("Không thể tải kích thước");
@@ -25,7 +25,7 @@ export default function SizePage() {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/sizes", { name });
+      await axios.post(`${BASE_URL}/api/sizes`, { name });
       setName("");
       setMessage("✅ Thêm kích thước thành công!");
       fetchSizes();
@@ -39,7 +39,7 @@ export default function SizePage() {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/sizes/${id}`);
+      await axios.delete(`${BASE_URL}/api/sizes/${id}`);
       fetchSizes();
     } catch (err) {
       alert("Không thể xoá kích thước!");
@@ -53,7 +53,7 @@ export default function SizePage() {
     }
 
     try {
-      await axios.put(`http://localhost:5000/api/sizes/${id}`, { name: editedName });
+      await axios.put(`${BASE_URL}/api/sizes/${id}`, { name: editedName });
       setEditingId(null);
       setMessage("✅ Cập nhật thành công!");
       fetchSizes();
