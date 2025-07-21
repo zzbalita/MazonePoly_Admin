@@ -57,7 +57,7 @@ export default function Login() {
          <div className="login-link">
           <span>Quên mật khẩu? </span>
           <button type="button" onClick={() => navigate("/forgot-password")}>
-            Đổi mật khẩu
+            Lấy lại mật khẩu
           </button>
         </div>
       </form>

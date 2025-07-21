@@ -13,6 +13,8 @@ import Descriptions from "./pages/Descriptions";
 import ProductDetail from "./pages/ProductDetail";
 import ProductEdit from "./pages/ProductEdit";
 import ForgotPassword from "./pages/ForgotPassword";
+import CustomerList from "./pages/CustomerList";
+import CustomerDetail from "./pages/CustomerDetail";
 
 
 function App() {
@@ -23,7 +25,7 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        
+
         {/* Admin routes - được bảo vệ */}
         <Route
           path="/dashboard"
@@ -96,6 +98,22 @@ function App() {
               <ProductEdit />
             </AdminLayout>
           } />
+
+        <Route path="/customers"
+          element={
+            <AdminLayout>
+              <CustomerList />
+            </AdminLayout>
+          } />
+
+          <Route path="/admin/customers/:id" 
+          element={
+            <AdminLayout>
+              <CustomerDetail />
+            </AdminLayout>
+          
+          } />
+
 
 
 
