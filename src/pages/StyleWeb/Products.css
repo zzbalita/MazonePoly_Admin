@@ -2,7 +2,7 @@
   height: 100vh; 
   display: flex;
   flex-direction: column;
-  padding: 0px 10px 0px 50px;
+  padding: 0px 10px 0px 20px;
   box-sizing: border-box;
   
  
@@ -175,4 +175,19 @@ input[name="ip-search"]{
 
 .image-wrapper .nav.right {
   right: 5px;
+}
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+.badge-featured {
+  background-color: gold;
+  color: black;
+}
+.badge-normal {
+  background-color: #ccc;
+  color: #333;
 }

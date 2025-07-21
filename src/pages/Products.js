@@ -6,7 +6,6 @@ import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import ProductCard from "../components/ProductCard";
 import { BASE_URL } from "../config";
 
-
 export default function Products() {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
@@ -21,6 +20,22 @@ export default function Products() {
       setProducts(res.data);
     } catch (err) {
       console.error("Lỗi tải sản phẩm", err);
+    }
+  };
+
+  // Hàm toggle trạng thái nổi bật
+  const handleToggleFeatured = async (id) => {
+    try {
+      const res = await axios.put(`${BASE_URL}/api/products/${id}/featured`);
+      const updatedFeatured = res.data.is_featured;
+      alert("Cập nhật trạng thái nổi bật thành công");
+      // Cập nhật lại danh sách sản phẩm trong state
+      setProducts((prev) =>
+        prev.map((p) => (p._id === id ? { ...p, is_featured: updatedFeatured } : p))
+      );
+    } catch (error) {
+      alert("Cập nhật trạng thái nổi bật thất bại");
+      console.error(error);
     }
   };
 
@@ -40,7 +55,6 @@ export default function Products() {
 
   return (
     <div className="product-page">
-
       <div style={{ background: "#fff", marginBottom: "10px", padding: "5px", borderRadius: "10px" }}>
         <div className="product-header">
           <h2>Quản Lý Sản Phẩm</h2>
@@ -59,7 +73,6 @@ export default function Products() {
           </select>
           <button className="btn-search">Tìm kiếm</button>
         </div>
-
       </div>
 
       <div className="product-scroll-container">
@@ -81,19 +94,26 @@ export default function Products() {
                         ? prod.variations.reduce((sum, v) => sum + (v.quantity || 0), 0)
                         : 0}
                     </p>
-
                   </div>
                 </div>
+                {/* Thêm icon trạng thái nổi bật */}
+                <span
+                  className={prod.is_featured ? "badge badge-featured" : "badge badge-normal"}
+                  onClick={() => handleToggleFeatured(prod._id)}
+                >
+                  {prod.is_featured ? "NỔI BẬT" : "THƯỜNG"}
+                </span>
 
                 <div className="actions">
                   <span className="status">
                     {prod.status === "Đang bán" ? "🟢 Đang bán" : "🔴 Ngừng bán"}
                   </span>
-                  <div className="icons">
+
+                  <div className="icons" style={{ marginLeft: "15px" }}>
                     <FaEye
                       title="Xem chi tiết"
                       style={{ cursor: "pointer", color: "green" }}
-                      onClick={() => navigate(`/products/${prod._id}`)}
+                       onClick={() => navigate(`/products/${prod._id}`, { state: { reload: true } })}
                     />
                     <FaEdit
                       title="Sửa"

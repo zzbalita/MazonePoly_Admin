@@ -3,12 +3,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./StyleWeb/ProductDetail.css";
 import { BASE_URL } from "../config";
+import { useLocation } from "react-router-dom";
+
 
 
 export default function ProductDetail() {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -19,8 +22,16 @@ export default function ProductDetail() {
                 console.error("Lỗi khi tải chi tiết sản phẩm:", err);
             }
         };
+
         fetchProduct();
-    }, [id]);
+
+        // Nếu có flag reload, xóa nó khỏi history sau khi dùng
+        if (location.state?.reload) {
+            window.history.replaceState({}, document.title);
+        }
+    }, [id, location.state?.reload]); // dùng location.state?.reload là tốt nhất
+
+
 
     if (!product) return <div>Đang tải...</div>;
 
@@ -86,6 +97,7 @@ export default function ProductDetail() {
             <p><strong>Danh mục:</strong> {product.category}</p>
             <p><strong>Trạng thái:</strong> {product.status}</p>
             <p><strong>Tổng số lượng:</strong> {product.quantity}</p>
+            <p><strong>Nổi bật:</strong> {product.is_featured ? "✔️ Có" : "❗Không"}</p>
 
             <h3>Mô tả sản phẩm:</h3>
             <ul>

@@ -31,6 +31,8 @@ export default function ProductAdd() {
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [variationQty, setVariationQty] = useState("");
+  const [isFeatured, setIsFeatured] = useState(false);
+
 
   const navigate = useNavigate();
 
@@ -135,7 +137,9 @@ export default function ProductAdd() {
       formData.append("status", status);
       formData.append("variations", JSON.stringify(variations));
       images.forEach((img) => formData.append("images", img));
-      
+      formData.append("is_featured", isFeatured);
+
+
       await axios.post(`${BASE_URL}/api/products`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -351,6 +355,18 @@ export default function ProductAdd() {
             ))}
           </select>
         </div>
+
+        <div className="form-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={isFeatured}
+              onChange={(e) => setIsFeatured(e.target.checked)}
+            />{" "}
+            Đánh dấu là sản phẩm nổi bật *
+          </label>
+        </div>
+
 
         <div className="form-group">
           <label>Trạng thái</label>
