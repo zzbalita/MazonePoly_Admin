@@ -15,6 +15,8 @@ import ProductEdit from "./pages/ProductEdit";
 import ForgotPassword from "./pages/ForgotPassword";
 import CustomerList from "./pages/CustomerList";
 import CustomerDetail from "./pages/CustomerDetail";
+import OrderList from "./pages/Orders";
+import OrderDetail from "./pages/OrderDetail";
 
 
 function App() {
@@ -106,13 +108,31 @@ function App() {
             </AdminLayout>
           } />
 
-          <Route path="/admin/customers/:id" 
+
+        <Route path="/admin/customers/:id"
           element={
             <AdminLayout>
               <CustomerDetail />
             </AdminLayout>
-          
+
           } />
+        <Route
+          path="/orders"
+          element={
+            <AdminLayout>
+              <OrderList />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/orders/:id"
+          element={
+            <AdminLayout>
+              <OrderDetail />
+            </AdminLayout>
+          }
+        />
+
 
 
 

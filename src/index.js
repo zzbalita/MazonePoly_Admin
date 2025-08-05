@@ -6,13 +6,15 @@ import reportWebVitals from './reportWebVitals';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import 'antd/dist/reset.css';
-
+import { AdminAuthProvider } from '../src/contexts/AdminAuthContext';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <AdminAuthProvider>
+      <App />
+    </AdminAuthProvider>
   </React.StrictMode>
 );
 

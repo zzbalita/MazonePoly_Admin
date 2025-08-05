@@ -3,12 +3,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./StyleWeb/Login.css";
 import { BASE_URL } from "../config";
+import { useAdminAuth } from '../../src/contexts/AdminAuthContext';
 
 
 export default function Login() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate(); //điều hướng
+  const { login } = useAdminAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,9 +19,15 @@ export default function Login() {
         phone,
         password,
       });
-      localStorage.setItem("token", res.data.token);
+
+      const token = res.data.token;
+      const adminInfo = res.data.admin; // hoặc res.data.adminInfo tùy backend
+
+      // ✅ Gọi context login để lưu vào localStorage và state
+      login(token, adminInfo);
+
       alert("Đăng nhập thành công");
-      navigate("/dashboard"); // điều hướng đến dashboard
+      navigate("/dashboard");
     } catch (err) {
       alert("Sai số điện thoại hoặc mật khẩu");
     }
@@ -51,10 +59,10 @@ export default function Login() {
         </div>
 
         <button type="submit" className="login-button">
-          Đăng nhập 
+          Đăng nhập
         </button>
 
-         <div className="login-link">
+        <div className="login-link">
           <span>Quên mật khẩu? </span>
           <button type="button" onClick={() => navigate("/forgot-password")}>
             Lấy lại mật khẩu
