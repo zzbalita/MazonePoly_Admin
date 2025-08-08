@@ -1,19 +1,23 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
-// Tạo context
 const AdminAuthContext = createContext();
 
 export const AdminAuthProvider = ({ children }) => {
   const [adminToken, setAdminToken] = useState(null);
   const [adminInfo, setAdminInfo] = useState(null);
 
-  // Khi load lại trang, cố gắng lấy thông tin từ localStorage
   useEffect(() => {
     const storedToken = localStorage.getItem('adminToken');
     const storedAdmin = localStorage.getItem('adminInfo');
 
-    if (storedToken) setAdminToken(storedToken);
-    if (storedAdmin) setAdminInfo(JSON.parse(storedAdmin));
+    if (storedToken) {
+      setAdminToken(storedToken);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`; // Set token cho axios khi load lại
+    }
+    if (storedAdmin) {
+      setAdminInfo(JSON.parse(storedAdmin));
+    }
   }, []);
 
   const login = (token, adminData) => {
@@ -21,6 +25,8 @@ export const AdminAuthProvider = ({ children }) => {
     setAdminInfo(adminData);
     localStorage.setItem('adminToken', token);
     localStorage.setItem('adminInfo', JSON.stringify(adminData));
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // ✅ Set token sau login
   };
 
   const logout = () => {
@@ -28,6 +34,8 @@ export const AdminAuthProvider = ({ children }) => {
     setAdminInfo(null);
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminInfo');
+
+    delete axios.defaults.headers.common['Authorization'];
   };
 
   return (
@@ -37,5 +45,4 @@ export const AdminAuthProvider = ({ children }) => {
   );
 };
 
-// Hook để dùng trong component
 export const useAdminAuth = () => useContext(AdminAuthContext);

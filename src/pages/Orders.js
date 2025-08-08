@@ -116,8 +116,8 @@ export default function OrderList() {
                       </td>
                       <td>{new Date(order.createdAt).toLocaleString()}</td>
                       <td>
-                        <span className={`payment-tag ${order.payment_method === 'momo' ? 'online' : 'cod'}`}>
-                          {order.payment_method === 'momo' ? 'ONLINE' : 'COD'}
+                        <span className={`payment-tag ${order.payment_method === 'vnpay' ? 'online' : 'cod'}`}>
+                          {order.payment_method === 'vnpay' ? 'ONLINE' : 'COD'}
                         </span>
                       </td>
                       <td>

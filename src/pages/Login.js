@@ -13,25 +13,26 @@ export default function Login() {
   const { login } = useAdminAuth();
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(`${BASE_URL}/api/admin/login`, {
-        phone,
-        password,
-      });
+  e.preventDefault();
+  try {
+    const res = await axios.post(`${BASE_URL}/api/admin/login`, {
+      phone,
+      password,
+    });
 
-      const token = res.data.token;
-      const adminInfo = res.data.admin; // hoặc res.data.adminInfo tùy backend
+    const token = res.data.token;
+    const adminInfo = res.data.admin;
 
-      // ✅ Gọi context login để lưu vào localStorage và state
-      login(token, adminInfo);
+    login(token, adminInfo);
 
-      alert("Đăng nhập thành công");
-      navigate("/dashboard");
-    } catch (err) {
-      alert("Sai số điện thoại hoặc mật khẩu");
-    }
-  };
+  
+    alert("Đăng nhập thành công");
+    navigate("/dashboard");
+  } catch (err) {
+    alert(err.response?.data?.message || "Sai số điện thoại hoặc mật khẩu");
+  }
+};
+
 
   return (
     <div className="login-container">
