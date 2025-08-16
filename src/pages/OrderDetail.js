@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../config';
 import { useAdminAuth } from '../../src/contexts/AdminAuthContext';
 import './StyleWeb/OrderDetail.css';
-
+import { StatisticsContext } from "../layouts/AdminLayout";
 // Trạng thái đơn hàng (map cho hiển thị)
 const statusMap = {
     pending: 'Chờ xác nhận',
@@ -34,6 +34,7 @@ const getAvailableStatusOptions = (currentStatus) => {
 export default function OrderDetail() {
     const { id } = useParams();
     const { adminToken } = useAdminAuth();
+    const { triggerRefreshStatistics } = useContext(StatisticsContext);
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(true);
     const [newStatus, setNewStatus] = useState('');
@@ -103,6 +104,7 @@ export default function OrderDetail() {
                 }
             );
             setOrder(res.data.order);
+            triggerRefreshStatistics();
             alert("Huỷ đơn hàng thành công!");
             navigate('/orders');
         } catch (err) {

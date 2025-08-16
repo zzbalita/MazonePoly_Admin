@@ -5,7 +5,10 @@
   padding: 0px 10px 0px 20px;
   box-sizing: border-box;
   
- 
+ padding: 0px 20px 0px 30px;
+  background: #cccccc;
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .product-header {
@@ -14,7 +17,7 @@
   align-items: center;
   margin-bottom: 20px;
   background: #ffffff;
-  padding: 5px;
+  padding: 10px;
  
 
 
@@ -51,6 +54,7 @@
   margin-bottom: 20px;
   justify-content: end;
   height: 40px;
+  padding-right: 10px;
 }
 
 .product-search input,
@@ -191,3 +195,6 @@ input[name="ip-search"]{
   background-color: #ccc;
   color: #333;
 }
+.status.in-stock { color: green; }
+.status.out-of-stock { color: red; }
+.status.stopped { color: gray; font-style: italic; }

@@ -289,7 +289,8 @@ export default function ProductEdit() {
                 {/* Biến thể */}
                 <div className="form-group">
                     <label>Thêm biến thể (Màu + Size + Số lượng)</label>
-                    <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "10px" }}>
+                    <div style={{ display: "flex", gap: "10px", marginBottom: "10px", flexWrap: "wrap" }}>
+                        {/* Màu */}
                         <input
                             type="text"
                             placeholder="Màu"
@@ -297,6 +298,8 @@ export default function ProductEdit() {
                             onChange={(e) => setSelectedColor(e.target.value)}
                             style={{ width: "120px" }}
                         />
+
+                        {/* Size */}
                         <select
                             value={selectedSize}
                             onChange={(e) => setSelectedSize(e.target.value)}
@@ -307,6 +310,8 @@ export default function ProductEdit() {
                                 <option key={s._id} value={s.name}>{s.name}</option>
                             ))}
                         </select>
+
+                        {/* Số lượng */}
                         <input
                             type="number"
                             placeholder="Số lượng"
@@ -315,6 +320,7 @@ export default function ProductEdit() {
                             onChange={(e) => setVariationQty(e.target.value)}
                             style={{ width: "100px" }}
                         />
+
                         <button
                             className="add-btn"
                             type="button"
@@ -330,44 +336,66 @@ export default function ProductEdit() {
                                     setMessage("Biến thể này đã tồn tại.");
                                     return;
                                 }
-                                setVariations([...variations, {
-                                    color: selectedColor,
-                                    size: selectedSize,
-                                    quantity: Number(variationQty),
-                                }]);
+                                setVariations([
+                                    ...variations,
+                                    { color: selectedColor, size: selectedSize, quantity: Number(variationQty) }
+                                ]);
                                 setSelectedColor("");
                                 setSelectedSize("");
                                 setVariationQty("");
                             }}
-                        >+ Thêm</button>
+                        >
+                            + Thêm
+                        </button>
                     </div>
-                    {variations.length > 0 && (
-                        <div className="variation-list">
-                            {variations.map((v, idx) => (
-                                <div
-                                    key={idx}
-                                    className="variation-tag"
-                                    onClick={() =>
-                                        setVariations(variations.filter((_, i) => i !== idx))
-                                    }
-                                    style={{
-                                        cursor: "pointer",
-                                        backgroundColor: "#f0f0f0",
-                                        padding: "6px 10px",
-                                        borderRadius: "6px",
-                                        display: "inline-block",
-                                        margin: "4px",
-                                        userSelect: "none",
-                                    }}
-                                    title="Nhấn để xóa biến thể này"
-                                >
-                                    {v.color} - {v.size} - SL: {v.quantity}
-                                </div>
-                            ))}
-                        </div>
-                    )}
 
+                    {/* Danh sách biến thể */}
+                    {variations.length > 0 && (
+                        <table className="variation-table" style={{ width: "100%", marginTop: "10px", borderCollapse: "collapse" }}>
+                            <thead >
+                                <tr style={{ background: "#2d3748" }}>
+                                    <th style={{ padding: "8px", border: "1px solid #ddd" }}>Màu</th>
+                                    <th style={{ padding: "8px", border: "1px solid #ddd" }}>Size</th>
+                                    <th style={{ padding: "8px", border: "1px solid #ddd" }}>Số lượng</th>
+                                    <th style={{ padding: "8px", border: "1px solid #ddd" }}>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {variations.map((v, idx) => (
+                                    <tr key={idx}>
+                                        <td style={{ padding: "6px", border: "1px solid #ddd" }}>{v.color}</td>
+                                        <td style={{ padding: "6px", border: "1px solid #ddd" }}>{v.size}</td>
+                                        <td style={{ padding: "6px", border: "1px solid #ddd" }}>{v.quantity}</td>
+                                        <td style={{ padding: "6px", border: "1px solid #ddd" }}>
+                                            <button
+                                                type="button"
+                                                className="btn-delete"
+                                                style={{ marginRight: "6px" }}
+                                                onClick={() => {
+                                                    setSelectedColor(v.color);
+                                                    setSelectedSize(v.size);
+                                                    setVariationQty(v.quantity);
+                                                    // xoá cái cũ ra để nhập lại rồi add
+                                                    setVariations(variations.filter((_, i) => i !== idx));
+                                                }}
+                                            >
+                                                Xóa
+                                            </button>
+                                            {/* <button
+                type="button"
+                className="btn-delete"
+                onClick={() => setVariations(variations.filter((_, i) => i !== idx))}
+              >
+                Xoá
+              </button> */}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
                 </div>
+
 
                 {/* Tổng số lượng */}
                 <div className="form-group">

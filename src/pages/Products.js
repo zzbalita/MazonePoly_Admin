@@ -55,7 +55,7 @@ export default function Products() {
 
   return (
     <div className="product-page">
-      <div style={{ background: "#fff", marginBottom: "10px", padding: "5px", borderRadius: "10px" }}>
+      <div style={{ background: "#fff", marginBottom: "10px", padding: "7px", borderRadius: "10px" }}>
         <div className="product-header">
           <h2>Quản Lý Sản Phẩm</h2>
           <button className="btn-add" onClick={() => navigate("/products/add")}>
@@ -88,12 +88,7 @@ export default function Products() {
                     <p>Danh mục: {prod.category}</p>
                     <p>Thương hiệu: {prod.brand}</p>
                     <p>Giá bán: {prod.price?.toLocaleString()}₫</p>
-                    <p>
-                      Tổng kho:{" "}
-                      {prod.variations
-                        ? prod.variations.reduce((sum, v) => sum + (v.quantity || 0), 0)
-                        : 0}
-                    </p>
+
                   </div>
                 </div>
                 {/* Thêm icon trạng thái nổi bật */}
@@ -105,15 +100,21 @@ export default function Products() {
                 </span>
 
                 <div className="actions">
-                  <span className="status">
-                    {prod.status === "Đang bán" ? "🟢 Đang bán" : "🔴 Ngừng bán"}
+                  <span className={`status ${prod.status === "Đang bán" ? "in-stock" :
+                      prod.status === "Hết hàng" ? "out-of-stock" :
+                        "stopped"
+                    }`}>
+                    {prod.status === "Đang bán" && "🟢 Đang bán"}
+                    {prod.status === "Hết hàng" && "🔴 Hết hàng"}
+                    {prod.status === "Ngừng bán" && "⚪ Ngừng bán"}
                   </span>
+
 
                   <div className="icons" style={{ marginLeft: "15px" }}>
                     <FaEye
                       title="Xem chi tiết"
                       style={{ cursor: "pointer", color: "green" }}
-                       onClick={() => navigate(`/products/${prod._id}`, { state: { reload: true } })}
+                      onClick={() => navigate(`/products/${prod._id}`, { state: { reload: true } })}
                     />
                     <FaEdit
                       title="Sửa"

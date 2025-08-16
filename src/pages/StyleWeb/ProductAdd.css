@@ -165,49 +165,7 @@ input.title-input:focus {
   border-radius: 8px;
   border: 2px solid #ccc;
 }
-/* Khối chứa các tag biến thể */
-.variation-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-  
-}
 
-/* Mỗi tag biến thể */
-.variation-tag {
-  background-color: #f0f0f0;
-  padding: 6px 20px;
-  border-radius: 10px;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  transition: background 0.2s;
-  border: 1px solid #ccc;
-}
-
-/* Hover để nổi bật tag */
-.variation-tag:hover {
-  background-color: #e0e0e0;
-}
-
-/* Button xóa trong mỗi tag */
-.variation-tag button {
-  margin-left: 8px;
-  background-color: red;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-/* Hover button xóa */
-.variation-tag button:hover {
-  background-color: darkred;
-}
 
 /* Ô nhập biến thể */
 .form-group input[type="text"],

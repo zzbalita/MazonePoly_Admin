@@ -44,7 +44,7 @@ export default function ProductDetail() {
             <h3><p><strong>Tên sản phẩm: </strong> {product.name}</p></h3>
 
             {/* Ảnh đại diện */}
-            <h3>Ảnh đại diện:</h3>
+            <h3><strong>Ảnh đại diện:</strong></h3>
             {product.image && (
                 <img
                     src={
@@ -55,7 +55,8 @@ export default function ProductDetail() {
                     alt="Ảnh đại diện"
                     className="main-image"
                     style={{
-                        maxWidth: "300px",
+                        width: "100px",
+                        height: "100px",
                         borderRadius: "8px",
                         marginBottom: "10px"
                     }}
@@ -65,7 +66,7 @@ export default function ProductDetail() {
             {/* Ảnh bổ sung */}
             {product.images?.length > 0 && (
                 <>
-                    <h3>Ảnh bổ sung:</h3>
+                    <h3><strong>Ảnh bổ sung:</strong></h3>
                     <div className="image-list">
                         {product.images
                             .filter((img) => img !== product.image) // tránh trùng ảnh chính
@@ -84,29 +85,48 @@ export default function ProductDetail() {
                                         height: "100px",
                                         objectFit: "cover",
                                         marginRight: "10px",
-                                        borderRadius: "4px"
+                                        borderRadius: "4px",
+                                        marginBottom: "10px"
+
                                     }}
                                 />
                             ))}
                     </div>
                 </>
             )}
+            <h3><strong>Thông tin sản phẩm:</strong></h3>
+            <table className="product-table">
+                <thead>
+                    <tr>
+                        <th>Giá</th>
+                        <th>Thương hiệu</th>
+                        <th>Danh mục</th>
+                        <th>Trạng thái</th>
+                        <th>Tổng số lượng</th>
+                        <th>Nổi bật</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{product.price.toLocaleString()}₫</td>
+                        <td>{product.brand}</td>
+                        <td>{product.category}</td>
+                        <td>{product.status}</td>
+                        <td>{product.quantity}</td>
+                        <td>{product.is_featured ? "✔️ Có" : "❗Không"}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-            <p><strong>Giá:</strong> {product.price.toLocaleString()}₫</p>
-            <p><strong>Thương hiệu:</strong> {product.brand}</p>
-            <p><strong>Danh mục:</strong> {product.category}</p>
-            <p><strong>Trạng thái:</strong> {product.status}</p>
-            <p><strong>Tổng số lượng:</strong> {product.quantity}</p>
-            <p><strong>Nổi bật:</strong> {product.is_featured ? "✔️ Có" : "❗Không"}</p>
 
-            <h3>Mô tả sản phẩm:</h3>
+            <h3><strong>Mô tả sản phẩm:</strong></h3>
             <ul>
                 {product.description?.map((d, idx) => (
                     <li key={idx}><strong>{d.field}:</strong> {d.value}</li>
                 ))}
             </ul>
 
-            <h3>Biến thể (Màu + Size + SL):</h3>
+            <h3><strong>Biến thể (Màu + Size + SL):</strong></h3>
             <table className="variation-table">
                 <thead>
                     <tr>

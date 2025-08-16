@@ -258,29 +258,50 @@ export default function ProductAdd() {
           </div>
 
           {variations.length > 0 && (
-            <div className="variation-list">
-              {variations.map((v, idx) => (
-                <div
-                  key={idx}
-                  className="variation-tag"
-                  onClick={() =>
-                    setVariations(variations.filter((_, i) => i !== idx))
-                  }
-                  style={{
-                    cursor: "pointer",
-                    backgroundColor: "#f0f0f0",
-                    padding: "6px 10px",
-                    borderRadius: "6px",
-                    display: "inline-block",
-                    margin: "4px",
-                    userSelect: "none",
-                  }}
-                  title="Nhấn để xóa"
-                >
-                  {v.color} - {v.size} - SL: {v.quantity}
-                </div>
-              ))}
-            </div>
+            <table
+              className="variation-table"
+              style={{ width: "100%", marginTop: "10px", borderCollapse: "collapse" }}
+            >
+              <thead>
+                <tr style={{ background: "#2d3748" }}>
+                  <th style={{ padding: "8px", border: "1px solid #ddd" }}>Màu</th>
+                  <th style={{ padding: "8px", border: "1px solid #ddd" }}>Size</th>
+                  <th style={{ padding: "8px", border: "1px solid #ddd" }}>Số lượng</th>
+                  <th style={{ padding: "8px", border: "1px solid #ddd" }}>Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                {variations.map((v, idx) => (
+                  <tr key={idx}>
+                    <td style={{ padding: "6px", border: "1px solid #ddd" }}>{v.color}</td>
+                    <td style={{ padding: "6px", border: "1px solid #ddd" }}>{v.size}</td>
+                    <td style={{ padding: "6px", border: "1px solid #ddd" }}>{v.quantity}</td>
+                    <td style={{ padding: "6px", border: "1px solid #ddd" }}>
+                      <button
+                        type="button"
+                        className="btn-delete"
+                        style={{ marginRight: "6px" }}
+                        onClick={() => {
+                          setSelectedColor(v.color);
+                          setSelectedSize(v.size);
+                          setVariationQty(v.quantity);
+                          // bỏ biến thể cũ ra để người dùng nhập lại
+                          setVariations(variations.filter((_, i) => i !== idx));
+                        }}
+                      >
+                        Xóa
+                      </button>
+                      {/* <button
+              type="button"
+              onClick={() => setVariations(variations.filter((_, i) => i !== idx))}
+            >
+              ❌ Xoá
+            </button> */}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
 
         </div>

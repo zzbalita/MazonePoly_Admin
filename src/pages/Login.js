@@ -12,7 +12,7 @@ export default function Login() {
   const navigate = useNavigate(); //điều hướng
   const { login } = useAdminAuth();
 
-  const handleLogin = async (e) => {
+const handleLogin = async (e) => {
   e.preventDefault();
   try {
     const res = await axios.post(`${BASE_URL}/api/admin/login`, {
@@ -25,9 +25,12 @@ export default function Login() {
 
     login(token, adminInfo);
 
-  
-    alert("Đăng nhập thành công");
-    navigate("/dashboard");
+    // Debug
+    console.log("Token lưu trong localStorage:", localStorage.getItem('adminToken'));
+    console.log("Admin info lưu trong localStorage:", localStorage.getItem('adminInfo'));
+
+    // Chuyển màn
+    navigate("/statistics/products");
   } catch (err) {
     alert(err.response?.data?.message || "Sai số điện thoại hoặc mật khẩu");
   }
