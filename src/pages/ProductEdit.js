@@ -11,6 +11,7 @@ export default function ProductEdit() {
 
     const [name, setName] = useState("");
     const [price, setPrice] = useState("");
+    const [importPrice, setImportPrice] = useState("");
     const [category, setCategory] = useState("");
     const [brand, setBrand] = useState("");
     const [status, setStatus] = useState("Đang bán");
@@ -62,6 +63,7 @@ export default function ProductEdit() {
             const data = res.data;
             setName(data.name);
             setPrice(data.price);
+            setImportPrice(data.import_price || "");
             setCategory(data.category);
             setBrand(data.brand);
             setStatus(data.status);
@@ -151,6 +153,8 @@ export default function ProductEdit() {
         const errors = [];
         if (!name.trim()) errors.push("Tên không được để trống.");
         if (!price || isNaN(price) || Number(price) <= 0) errors.push("Giá không hợp lệ.");
+        if (!importPrice || isNaN(importPrice) || Number(importPrice) <= 0)
+            errors.push("Giá nhập không hợp lệ.");
         if (!category) errors.push("Chọn danh mục.");
         if (!brand) errors.push("Chọn thương hiệu.");
         if (variations.length === 0) errors.push("Thêm ít nhất một biến thể.");
@@ -167,6 +171,7 @@ export default function ProductEdit() {
             const formData = new FormData();
             formData.append("name", name);
             formData.append("price", price);
+            formData.append("import_price", importPrice);
             formData.append("category", category);
             formData.append("brand", brand);
             formData.append("status", status);
@@ -441,7 +446,16 @@ export default function ProductEdit() {
 
                 {/* Giá, danh mục, thương hiệu, trạng thái */}
                 <div className="form-group">
-                    <label>Giá</label>
+                    <label>Giá nhập</label>
+                    <input
+                        type="number"
+                        value={importPrice}
+                        onChange={(e) => setImportPrice(e.target.value)}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Giá bán</label>
                     <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
                 </div>
 

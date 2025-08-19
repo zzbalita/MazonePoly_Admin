@@ -18,6 +18,8 @@ import CustomerDetail from "./pages/CustomerDetail";
 import OrderList from "./pages/Orders";
 import OrderDetail from "./pages/OrderDetail";
 import ProductStatistics from "./pages/ProductStatistics";
+import OrderStatistics from "./pages/OrderStatistics";
+import InventoryStatistics from "./pages/InventoryStatistics";
 
 function App() {
   return (
@@ -140,7 +142,22 @@ function App() {
             </AdminLayout>
           }
         />
-
+        <Route
+          path="/statistics/orders"
+          element={
+            <AdminLayout>
+              <OrderStatistics />
+            </AdminLayout>
+          }
+        />
+         <Route
+          path="/statistics/inventory"
+          element={
+            <AdminLayout>
+              <InventoryStatistics />
+            </AdminLayout>
+          }
+        />
 
 
       </Routes>

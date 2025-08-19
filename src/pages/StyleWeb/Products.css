@@ -198,3 +198,53 @@ input[name="ip-search"]{
 .status.in-stock { color: green; }
 .status.out-of-stock { color: red; }
 .status.stopped { color: gray; font-style: italic; }
+
+.modal-backdrop{
+  position: fixed; inset: 0; background: rgba(0,0,0,.35);
+  display: flex; align-items: center; justify-content: center; z-index: 999;
+}
+.modal{
+  background: #fff; width: min(760px, 100vw); border-radius: 12px; padding: 16px 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+}
+.modal h3{ margin: 0 0 12px; }
+.modal-actions{ display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; }
+.modal-actions .btn-primary{ background: #1677ff; color: #fff; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+.modal-actions button{ padding: 8px 14px; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; }
+
+.restock-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.restock-table th {
+  background: #2c3e50; /* xanh đậm */
+  color: #fff;
+}
+
+.restock-table th, 
+.restock-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+  font-size: 14px;
+}
+
+.restock-table th {
+  font-weight: bold;
+}
+
+.restock-table td input {
+  width: 60px;
+  padding: 4px;
+  font-size: 13px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+

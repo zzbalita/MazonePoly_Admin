@@ -49,18 +49,18 @@ h2 {
     margin: 0;
 }
 .stat-cards .card.total-products {
-  background: linear-gradient(135deg, #4facfe, #00f2fe); /* Xanh dương */
+  background: linear-gradient(135deg, #4facfe, #00f2fe); 
 }
 
 .stat-cards .card.total-stock {
-  background: linear-gradient(135deg, #f6d365, #fda085); /* Cam */
+  background: linear-gradient(135deg, #f6d365, #fda085); 
 }
 
 .stat-cards .card.low-stock {
-  background: linear-gradient(135deg, #ff758c, #ff7eb3); /* Đỏ hồng */
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
 }
 .stat-cards .card.out-of-stock {
-  background: linear-gradient(135deg, #75ff95, #7ef4ff); /* Đỏ hồng */
+  background: linear-gradient(135deg, #75ff95, #7ef4ff);
 }
 
 /* Bộ lọc */
@@ -104,7 +104,7 @@ h2 {
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-.stat-table thead {
+.stat-table th {
   background-color: #007bff; /* Xanh đậm */
   color: #fff;
 }

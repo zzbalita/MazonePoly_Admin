@@ -127,7 +127,7 @@ export default function ProductStatistics() {
                             <th>Danh mục</th>
                             <th>Trạng thái</th>
                             <th>Đã bán</th>
-                            <th>Doanh thu</th>
+                            <th>Giá bán sản phẩm</th>
                             <th>Tồn kho</th>
                         </tr>
                     </thead>

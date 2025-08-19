@@ -8,6 +8,7 @@ import { BASE_URL } from "../config";
 export default function ProductAdd() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [importPrice, setImportPrice] = useState("");
   const [category, setCategory] = useState("");
   const [brand, setBrand] = useState("");
   const [status, setStatus] = useState("Đang bán");
@@ -112,6 +113,8 @@ export default function ProductAdd() {
     if (!images.length) errors.push("Vui lòng chọn ít nhất một ảnh sản phẩm.");
     if (variations.length === 0) errors.push("Vui lòng thêm ít nhất một biến thể sản phẩm.");
     if (!image) errors.push("Vui lòng chọn ảnh đại diện.");
+    if (!importPrice || isNaN(importPrice) || Number(importPrice) <= 0)
+      errors.push("Giá nhập phải là số dương.");
 
 
     const emptyDescriptions = descriptions.filter((desc) => !desc.value.trim());
@@ -132,6 +135,7 @@ export default function ProductAdd() {
       formData.append("image", image); // ảnh đại diện
       formData.append("description", JSON.stringify(descriptions));
       formData.append("price", price);
+      formData.append("import_price", importPrice);
       formData.append("category", category);
       formData.append("brand", brand);
       formData.append("status", status);
@@ -348,7 +352,17 @@ export default function ProductAdd() {
         ))}
 
         <div className="form-group">
-          <label>Giá</label>
+          <label>Giá nhập</label>
+          <input
+            type="number"
+            value={importPrice}
+            onChange={(e) => setImportPrice(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Giá bán</label>
           <input
             type="number"
             value={price}
@@ -356,6 +370,7 @@ export default function ProductAdd() {
             required
           />
         </div>
+
 
         <div className="form-group">
           <label>Danh mục</label>

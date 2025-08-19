@@ -41,7 +41,7 @@
 
 
 /* Header */
-.variation-table thead {
+.variation-table th {
   background-color: #2d3748; /* xanh đậm */
   color: #ffffff;
 }
@@ -80,7 +80,7 @@
 }
 
 /* Header */
-.product-table thead {
+.product-table th {
   background-color: #2d3748; /* xanh đậm */
   color: #ffffff;
 }

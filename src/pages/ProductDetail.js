@@ -98,7 +98,8 @@ export default function ProductDetail() {
             <table className="product-table">
                 <thead>
                     <tr>
-                        <th>Giá</th>
+                        <th>Giá nhập</th>
+                        <th>Giá bán</th>
                         <th>Thương hiệu</th>
                         <th>Danh mục</th>
                         <th>Trạng thái</th>
@@ -108,7 +109,8 @@ export default function ProductDetail() {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{product.price.toLocaleString()}₫</td>
+                        <td>{product.import_price?.toLocaleString()}₫</td>
+                        <td>{product.price?.toLocaleString()}₫</td>
                         <td>{product.brand}</td>
                         <td>{product.category}</td>
                         <td>{product.status}</td>
