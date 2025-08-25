@@ -21,10 +21,16 @@ export const AdminAuthProvider = ({ children }) => {
   }, []);
 
   const login = (token, adminData) => {
+    // Add _id to admin data for consistency
+    const adminWithId = {
+      ...adminData,
+      _id: adminData._id || adminData.username // Use username as fallback if no _id
+    };
+    
     setAdminToken(token);
-    setAdminInfo(adminData);
+    setAdminInfo(adminWithId);
     localStorage.setItem('adminToken', token);
-    localStorage.setItem('adminInfo', JSON.stringify(adminData));
+    localStorage.setItem('adminInfo', JSON.stringify(adminWithId));
 
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // ✅ Set token sau login
   };

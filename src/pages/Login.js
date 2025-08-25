@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./StyleWeb/Login.css";
 import { BASE_URL } from "../config";
-import { useAdminAuth } from '../../src/contexts/AdminAuthContext';
+import { useAdminAuth } from '../contexts/AdminAuthContext';
 
 
 export default function Login() {
