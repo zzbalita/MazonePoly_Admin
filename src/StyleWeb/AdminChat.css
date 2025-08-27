@@ -37,23 +37,6 @@
   flex-wrap: wrap;
 }
 
-.debug-btn {
-  background: #6c757d;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-  margin-left: 10px;
-}
-
-.debug-btn:hover {
-  background: #495057;
-  transform: translateY(-1px);
-}
-
 .server-status {
   padding: 6px 12px;
   border-radius: 20px;
@@ -248,6 +231,26 @@
 
 .online-status {
   font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.online-status.online {
+  background: rgba(40, 167, 69, 0.15);
+  color: #28a745;
+  border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.online-status.offline {
+  background: rgba(220, 53, 69, 0.15);
+  color: #dc3545;
+  border: 1px solid rgba(220, 53, 69, 0.3);
 }
 
 .last-message {
@@ -344,16 +347,6 @@
 
 .close-btn:hover {
   background: #c82333;
-  transform: translateY(-2px);
-}
-
-.test-btn {
-  background: #28a745;
-  color: white;
-}
-
-.test-btn:hover {
-  background: #218838;
   transform: translateY(-2px);
 }
 

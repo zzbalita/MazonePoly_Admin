@@ -16,8 +16,6 @@ const AdminChatDashboard = () => {
   const [newMessageIndicator, setNewMessageIndicator] = useState(false);
   
   const messagesEndRef = useRef(null);
-  const selectedSessionRef = useRef(null);
-  const messagesRef = useRef(null);
   const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://192.168.1.9:5001' || 'http://localhost:5001';
 
   // Check if user is admin
@@ -45,15 +43,6 @@ const AdminChatDashboard = () => {
     };
   }, [adminInfo, adminToken, isAdmin]);
 
-  // Keep refs in sync with state
-  useEffect(() => {
-    selectedSessionRef.current = selectedSession;
-  }, [selectedSession]);
-
-  useEffect(() => {
-    messagesRef.current = messages;
-  }, [messages]);
-
   // Set up periodic refresh for real-time updates
   useEffect(() => {
     if (!adminInfo || !adminToken || !isAdmin) return;
@@ -64,21 +53,82 @@ const AdminChatDashboard = () => {
     }, 30000);
 
     // Refresh current chat messages every 15 seconds if a session is selected
-    if (selectedSession) {
-      const messagesInterval = setInterval(() => {
+    const messagesInterval = setInterval(() => {
+      if (selectedSession) {
         refreshCurrentChatMessages(selectedSession.session_id);
-      }, 15000);
+      }
+    }, 15000);
 
-      return () => {
-        clearInterval(sessionsInterval);
-        clearInterval(messagesInterval);
-      };
-    }
+    // Refresh user online status every 5 seconds
+    const statusInterval = setInterval(() => {
+      refreshUserOnlineStatus();
+    }, 5000);
 
     return () => {
       clearInterval(sessionsInterval);
+      clearInterval(messagesInterval);
+      clearInterval(statusInterval);
     };
   }, [adminInfo, adminToken, isAdmin, selectedSession]);
+
+  // Debug effect to log sessions state changes
+  useEffect(() => {
+    console.log('📊 Sessions state changed:', sessions);
+    console.log('📊 Sessions with online status:', sessions.map(s => ({
+      session_id: s.session_id,
+      user_id: s.user?.id, // Changed from _id to id
+      is_online: s.is_online
+    })));
+  }, [sessions]);
+
+  // Function to refresh user online status
+  const refreshUserOnlineStatus = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/users/online-status`, {
+        headers: {
+          'Authorization': `Bearer ${adminToken}`
+        }
+      });
+
+      if (response.data.success) {
+        const onlineUsersList = response.data.data.onlineUsers;
+        setOnlineUsers(new Set(onlineUsersList));
+
+        console.log('🔍 Online users:', onlineUsersList);
+        console.log('🔍 Online users Set:', new Set(onlineUsersList));
+        console.log('🔍 Online users type check:', onlineUsersList.map(id => ({ id, type: typeof id })));
+        
+        // Update sessions with online status using the current state
+        setSessions(prevSessions => {
+          // Don't proceed if no sessions are loaded yet
+          if (prevSessions.length === 0) {
+            console.log('⚠️ No sessions loaded yet, skipping online status refresh');
+            return prevSessions;
+          }
+          
+          console.log('🔄 Updating sessions with online status. Previous sessions:', prevSessions);
+          console.log('🔍 Current sessions count:', prevSessions.length);
+          
+          const updatedSessions = prevSessions.map(session => {
+            const userId = session.user?.id; // Changed from _id to id
+            const isOnline = userId ? onlineUsersList.includes(userId) : false;
+            
+            console.log(`Session ${session.session_id}: User ${userId} is ${isOnline ? 'online' : 'offline'}`);
+            
+            return {
+              ...session,
+              is_online: isOnline
+            };
+          });
+          
+          console.log('🔄 Updated sessions:', updatedSessions);
+          return updatedSessions;
+        });
+      }
+    } catch (error) {
+      console.error('Error refreshing user online status:', error);
+    }
+  };
 
   const setupSocketConnection = () => {
     const newSocket = io(API_BASE_URL, {
@@ -91,15 +141,6 @@ const AdminChatDashboard = () => {
     newSocket.on('connect', () => {
       console.log('🔌 Admin connected to socket:', newSocket.id);
       newSocket.emit('adminConnect', { adminId: adminInfo.username });
-      console.log('📤 Emitted adminConnect for:', adminInfo.username);
-    });
-
-    newSocket.on('disconnect', () => {
-      console.log('🔌 Admin disconnected from socket');
-    });
-
-    newSocket.on('connect_error', (error) => {
-      console.error('🔌 Admin socket connection error:', error);
     });
 
     newSocket.on('newUserMessage', (data) => {
@@ -109,10 +150,7 @@ const AdminChatDashboard = () => {
       loadAdminChats();
       
       // If this session is currently selected, add message to chat AND refresh messages
-      const currentSelectedSession = selectedSessionRef.current;
-      if (currentSelectedSession && currentSelectedSession.session_id === data.sessionId) {
-        console.log('✅ Adding user message to current chat session');
-        
+      if (selectedSession && selectedSession.session_id === data.sessionId) {
         // Add message to local state immediately for real-time feel
         addMessageToChat({
           message_id: data.messageId || `user_${Date.now()}`,
@@ -127,8 +165,6 @@ const AdminChatDashboard = () => {
         
         // Also refresh the full chat history to ensure consistency
         refreshCurrentChatMessages(data.sessionId);
-      } else {
-        console.log('ℹ️ Message not for currently selected session or no session selected');
       }
     });
 
@@ -139,10 +175,7 @@ const AdminChatDashboard = () => {
       loadAdminChats();
       
       // If this session is currently selected, add message to chat AND refresh messages
-      const currentSelectedSession = selectedSessionRef.current;
-      if (currentSelectedSession && currentSelectedSession.session_id === data.sessionId) {
-        console.log('✅ Adding admin message to current chat session');
-        
+      if (selectedSession && selectedSession.session_id === data.sessionId) {
         // Add message to local state immediately for real-time feel
         addMessageToChat({
           message_id: data.messageId || `admin_${Date.now()}`,
@@ -154,8 +187,6 @@ const AdminChatDashboard = () => {
         
         // Also refresh the full chat history to ensure consistency
         refreshCurrentChatMessages(data.sessionId);
-      } else {
-        console.log('ℹ️ Admin message not for currently selected session or no session selected');
       }
     });
 
@@ -182,18 +213,6 @@ const AdminChatDashboard = () => {
       // You can add typing indicator here
     });
 
-    newSocket.on('userOnline', (data) => {
-      setOnlineUsers(prev => new Set([...prev, data.userId]));
-    });
-
-    newSocket.on('userOffline', (data) => {
-      setOnlineUsers(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(data.userId);
-        return newSet;
-      });
-    });
-
     setSocket(newSocket);
   };
 
@@ -208,7 +227,15 @@ const AdminChatDashboard = () => {
 
       if (response.data.success) {
         const newSessions = response.data.data.sessions;
+        console.log('📋 Loaded sessions:', newSessions);
+        console.log('📋 First session structure:', newSessions[0]);
+        console.log('📋 First session user object:', newSessions[0]?.user);
+        console.log('📋 First session user ID:', newSessions[0]?.user?.id);
+        
         setSessions(newSessions);
+        
+        // Immediately refresh online status after loading sessions
+        await refreshUserOnlineStatus();
         
         // If we have a selected session, update it with fresh data
         if (selectedSession) {
@@ -240,16 +267,13 @@ const AdminChatDashboard = () => {
 
       if (response.data.success) {
         // Only update messages if this session is still selected
-        const currentSelectedSession = selectedSessionRef.current;
-        if (currentSelectedSession && currentSelectedSession.session_id === sessionId) {
+        if (selectedSession && selectedSession.session_id === sessionId) {
           setMessages(response.data.data.messages);
           console.log('✅ Chat messages refreshed:', response.data.data.messages.length);
           scrollToBottom();
           
           // Clear new message indicator when messages are refreshed
           setNewMessageIndicator(false);
-        } else {
-          console.log('ℹ️ Session no longer selected, skipping message refresh');
         }
       }
     } catch (error) {
@@ -273,11 +297,6 @@ const AdminChatDashboard = () => {
     if (socket) {
       socket.emit('joinAdminChat', { sessionId: session.session_id });
       console.log('👨‍💼 Admin joined admin chat room:', session.session_id);
-      console.log('🔍 Current socket state:', {
-        connected: socket.connected,
-        id: socket.id,
-        sessionId: session.session_id
-      });
     }
     
     try {
@@ -328,23 +347,7 @@ const AdminChatDashboard = () => {
   };
 
   const addMessageToChat = (message) => {
-    console.log('📝 Adding message to chat:', {
-      message_id: message.message_id,
-      text: message.text.substring(0, 50),
-      is_user: message.is_user,
-      currentMessagesCount: messagesRef.current ? messagesRef.current.length : 0
-    });
-    
-    setMessages(prev => {
-      const newMessages = [...prev, message];
-      console.log('✅ Messages state updated:', {
-        previousCount: prev.length,
-        newCount: newMessages.length,
-        newMessage: message.text.substring(0, 50)
-      });
-      return newMessages;
-    });
-    
+    setMessages(prev => [...prev, message]);
     setTimeout(scrollToBottom, 100);
     
     // Clear new message indicator when admin sends a message
@@ -403,38 +406,14 @@ const AdminChatDashboard = () => {
 
   return (
     <div className="admin-chat-container">
-              <div className="admin-chat-header">
-          <h1>💬 Chăm sóc khách hàng</h1>
-          <p>Quản lý chat với khách hàng từ ứng dụng di động</p>
-          <div className="admin-info">
-            <span>👨‍💼 {adminInfo.name}</span>
-            <span>🟢 Online</span>
-            <button 
-              className="debug-btn"
-              onClick={() => {
-                console.log('🔍 Debug Info:', {
-                  socket: socket ? 'Connected' : 'Connected',
-                  socketId: socket?.id,
-                  selectedSession: selectedSessionRef.current,
-                  messagesCount: messagesRef.current?.length || 0,
-                  sessionsCount: sessions.length
-                });
-                
-                if (socket) {
-                  socket.emit('adminConnect', { adminId: adminInfo.username });
-                  console.log('🔄 Re-emitted adminConnect');
-                  
-                  // Test socket by emitting a test event
-                  if (selectedSessionRef.current) {
-                    console.log('🧪 Testing socket with selected session:', selectedSessionRef.current.session_id);
-                  }
-                }
-              }}
-            >
-              🐛 Debug
-            </button>
-          </div>
+      <div className="admin-chat-header">
+        <h1>💬 Chăm sóc khách hàng</h1>
+        <p>Quản lý chat với khách hàng từ ứng dụng di động</p>
+        <div className="admin-info">
+          <span>👨‍💼 {adminInfo.name}</span>
+          <span>🟢 Online</span>
         </div>
+      </div>
 
       <div className="admin-chat-content">
         {/* Sessions List */}
@@ -458,7 +437,9 @@ const AdminChatDashboard = () => {
             ) : (
               sessions.map((session) => {
                 const unreadCount = getUnreadCount(session);
-                const isOnline = onlineUsers.has(session.user?._id);
+                const isOnline = session.is_online || false;
+                
+                console.log(`🎨 Rendering session ${session.session_id}: is_online = ${isOnline}`);
                 
                 return (
                   <div
@@ -479,7 +460,7 @@ const AdminChatDashboard = () => {
                       <div className="session-meta">
                         {getSessionStatus(session)}
                         <span className={`online-status ${isOnline ? 'online' : 'offline'}`}>
-                          {isOnline ? '🟢' : '🔴'}
+                          {isOnline ? '🟢 Online' : '🔴 Offline'}
                         </span>
                       </div>
                     </div>
@@ -523,17 +504,6 @@ const AdminChatDashboard = () => {
                     <span>Session: {selectedSession.session_id}</span>
                     <span>Tin nhắn: {selectedSession.total_messages}</span>
                   </div>
-                </div>
-                <div className="chat-actions">
-                  <button 
-                    className="action-btn close-btn"
-                    onClick={() => {
-                      // Implement close session functionality
-                      alert('Tính năng đóng session sẽ được thêm sau');
-                    }}
-                  >
-                    🔒 Đóng session
-                  </button>
                 </div>
               </div>
 
