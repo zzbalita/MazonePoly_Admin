@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
 import {
   FaChartPie, FaBoxOpen, FaTags, FaClipboardList, FaUsers, FaCogs,
-  FaShoppingBag, FaTextHeight, FaAlignLeft, FaChevronDown, FaChevronRight
+  FaShoppingBag, FaTextHeight, FaAlignLeft, FaChevronDown, FaChevronRight,
+  FaComments
 } from "react-icons/fa";
 import { useState } from "react";
 import "./Sidebar.css";
@@ -63,6 +64,9 @@ export default function Sidebar() {
         </NavLink>
         <NavLink to="/customers" className={({ isActive }) => (isActive ? "active" : "")}>
           <FaUsers className="icon" /> Khách hàng
+        </NavLink>
+        <NavLink to="/chat" className={({ isActive }) => (isActive ? "active" : "")}>
+          <FaComments className="icon" /> Chăm sóc khách hàng
         </NavLink>
         <NavLink to="/settings" className={({ isActive }) => (isActive ? "active" : "")}>
           <FaCogs className="icon" /> Cài đặt

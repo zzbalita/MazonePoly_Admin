@@ -20,6 +20,7 @@ import OrderDetail from "./pages/OrderDetail";
 import ProductStatistics from "./pages/ProductStatistics";
 import OrderStatistics from "./pages/OrderStatistics";
 import InventoryStatistics from "./pages/InventoryStatistics";
+import AdminChatDashboard from "./pages/AdminChatDashboard";
 
 function App() {
   return (
@@ -159,6 +160,17 @@ function App() {
           }
         />
 
+         {/* Chăm sóc khách hàng */}
+         <Route
+          path="/chat"
+          element={
+            <PrivateRoute>
+              <AdminLayout>
+                <AdminChatDashboard />
+              </AdminLayout>
+            </PrivateRoute>
+          }
+        />
 
       </Routes>
     </Router>
